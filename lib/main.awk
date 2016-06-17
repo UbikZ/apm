@@ -6,7 +6,7 @@ function include(includeFile) {
 
 function sourceIncludes() {
   if (!loaded) {
-    scriptname="/usr/bin/awk -f main.awk";
+    scriptname="/usr/bin/awk -f ./lib/main.awk";
     for (file in includes) {
       includeString = includeString " -f "file;
     }
@@ -16,7 +16,7 @@ function sourceIncludes() {
 }
 
 BEGIN {
-  include("./common.awk");
+  include("./lib/common.awk");
   sourceIncludes();
 
   usage();
