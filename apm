@@ -3,6 +3,14 @@
 # Tip to use shell
 true ,/^; exec awk -f "$0" -v mainFile="$0" -- "$@"; exit #/ {}
 
+BEGIN {
+  include("./lib/common.awk");
+  include("./lib/init.awk");
+  sourceIncludes();
+
+  apm();
+}
+
 function include(includeFile) {
   includes[includeFile]
 }
@@ -19,36 +27,5 @@ function sourceIncludes() {
     cmd = sprintf("%s %s -v loaded=1 -- %s\n", scriptname, includeString, args);
     system(cmd);
     exit;
-  }
-}
-
-BEGIN {
-  include("./lib/common.awk");
-  include("./lib/init.awk");
-  sourceIncludes();
-
-
-  if (ARGC == 1 || (ARGC == 2 && ARGV[1] == "-h")) {
-    usage()
-  } else {
-    handlePosix();
-  }
-}
-
-function usage() {
-  print "usage: apm [--list]";
-  print "";
-  print "  --list     List of all dependencies.";
-  print "";
-  exit
-}
-
-function handlePosix() {
-  for(i = 1; i < ARGC; i++) {
-    arg = ARGV[i];
-    if (arg == "--list") {
-      ARGV[i] = "";
-      initLoadModule();
-    }
   }
 }
