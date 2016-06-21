@@ -4,11 +4,15 @@
 true ,/^; exec awk -f "$0" -v mainFile="$0" -- "$@"; exit #/ {}
 
 BEGIN {
+  include("./lib/define.awk");
   include("./lib/common.awk");
   include("./lib/init.awk");
   sourceIncludes();
 
-  apm();
+  defineConstants();
+  defineExec();
+  
+  upm();
 }
 
 function include(includeFile) {
@@ -17,7 +21,9 @@ function include(includeFile) {
 
 function sourceIncludes() {
   if (!loaded) {
-    scriptname="/usr/bin/awk -f "mainFile;
+    "which awk" | getline awkPath
+    scriptname = awkPath " -f "mainFile;
+
     for (i = 1; i < ARGC; i++) {
       args = args " "ARGV[i];
     }

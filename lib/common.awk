@@ -1,29 +1,30 @@
 #!/usr/bin/awk -f
 
+
+# Main command parameters handler
+function upm() {
+  for(i = 1; i < ARGC; i++) {
+    argument = ARGV[i];
+    if (argument ~ "^(-l|--list)$") {
+      ARGV[i] = "";
+      #todo
+    } else if (argument ~ "^(-v|--version)$") {
+      ARGV[i] = "";
+      print(version);
+    } else {
+      usage();
+    }
+  }
+  exit;
+}
+
+# Print the usage
 function usage() {
-  print "usage: apm [--list]";
+  print "usage: upm [--list]";
   print "";
   print "  -l, --list         List of all dependencies.";
   print "  -v, --version      Print the current version.";
   print "  -h, --help         Print the usage message.";
+  print "  -g, --global       Install dependencies globally.";
   print "";
-  exit;
-}
-
-function apm() {
-  if (ARGC == 1 || (ARGC == 2 && ARGV[1] ~ "^(--help|-h)$")) {
-    usage();
-  } else {
-    handleParameters();
-  }
-}
-
-function handleParameters() {
-  for(i = 1; i < ARGC; i++) {
-    arg = ARGV[i];
-    if (arg ~ "^(--list|-l)$") {
-      ARGV[i] = "";
-      initLoadModule();
-    }
-  }
 }
