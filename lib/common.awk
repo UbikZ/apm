@@ -5,23 +5,28 @@ function upm() {
   if (ARGC == 1) {
     usage();
   } else {
-    for(i = 1; i < ARGC; i++) {
+    for (i = 1; i < ARGC; i++) {
       argument = ARGV[i];
       # Options
       if (argument ~ "^(-v|--version)$") {
-        ARGV[i] = "";
         print(version);
-      } else if (argument ~ "^(-c|--check)$") {
-        ARGV[i] = "";
-        verbose = 1;
-        checkConfiguration();
-        checkExecs();
-      } else if (argument ~ "^(--verbose)$") {
-        ARGV[i] = "";
+        exit;
+      } else if (argument ~ "^(-V|--verbose)$") {
         verbose = 1;
       } else if (argument ~ "^(-h|--help)?$"){
         usage();
-      } else {
+      }
+      # Commands
+      else if (argument == "check") {
+        verbose = 1;
+        checkConfiguration();
+        checkExecs();
+        exit;
+      } else if (argument == "init") {
+        # todo
+      }
+      # If there is some trouble with the command/options
+      else {
         printf("\nCommand \"%s\" is not defined.\n", argument);
         usage();
       }
