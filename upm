@@ -4,6 +4,9 @@
 true ,/^; exec awk -f "$0" -v mainFile="$0" -- "$@"; exit #/ {}
 
 BEGIN {
+  # We define verbode mode here
+  verbose = 0;
+
   include("./lib/check.awk");
   include("./lib/common.awk");
   include("./lib/init.awk");

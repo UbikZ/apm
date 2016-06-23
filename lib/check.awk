@@ -2,7 +2,6 @@
 
 function checkConfiguration() {
   version = "0.0.1";
-  verbose = 1;
   packageFile = "upm.json";
   packageModules = "upm_modules";
   if (verbose == 1) {

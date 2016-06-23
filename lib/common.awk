@@ -14,8 +14,12 @@ function upm() {
         print(version);
       } else if (argument ~ "^(-c|--check)$") {
         ARGV[i] = "";
+        verbose = 1;
         checkConfiguration();
         checkExecs();
+      } else if (argument ~ "^(--verbose)$") {
+        ARGV[i] = "";
+        verbose = 1;
       } else {
         if (argument !~ "^(-h|--help)$") {
           printf("Command \"%s\" is not defined.\n\n", argument);
@@ -35,6 +39,7 @@ function usage() {
   print("  -v, --version      Print the current version.");
   print("  -g, --global       Install dependencies globally.");
   print("  -c, --check        Check upm right configuration.");
+  print("  --verbose          Enable verbose mode.");
   print("  -h, --help         Print the usage message.");
 
   exit;
