@@ -7,9 +7,8 @@ function upm() {
   } else {
     for(i = 1; i < ARGC; i++) {
       argument = ARGV[i];
-      if (argument ~ "^(-l|--list)$") {
-        ARGV[i] = "";
-      } else if (argument ~ "^(-v|--version)$") {
+      # Options
+      if (argument ~ "^(-v|--version)$") {
         ARGV[i] = "";
         print(version);
       } else if (argument ~ "^(-c|--check)$") {
@@ -20,10 +19,10 @@ function upm() {
       } else if (argument ~ "^(--verbose)$") {
         ARGV[i] = "";
         verbose = 1;
+      } else if (argument ~ "^(-h|--help)?$"){
+        usage();
       } else {
-        if (argument !~ "^(-h|--help)$") {
-          printf("Command \"%s\" is not defined.\n\n", argument);
-        }
+        printf("\nCommand \"%s\" is not defined.\n", argument);
         usage();
       }
     }
@@ -34,13 +33,13 @@ function upm() {
 
 # Print the usage
 function usage() {
-  print("usage: upm [--list]");
-  print("  -l, --list         List of all dependencies.");
-  print("  -v, --version      Print the current version.");
-  print("  -g, --global       Install dependencies globally.");
-  print("  -c, --check        Check upm right configuration.");
-  print("  --verbose          Enable verbose mode.");
-  print("  -h, --help         Print the usage message.");
+  print("\nUsage: upm <options> <command>\n");
+  print("Where <options> are :");
+  print("   -v, --version   Display the upm version.");
+  print("   -V, --verbose   Enable the verbose mode.");
+  print("   -h, --help      Display usage.")
+  print("\nWhere <command> is one of :");
+  print("   check, init, install, list, saarch, uninstall, version\n");
 
   exit;
 }

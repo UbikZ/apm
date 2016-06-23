@@ -7,21 +7,26 @@ BEGIN {
   # We define verbode mode here
   verbose = 0;
 
+  # We are includeing script files
   include("./lib/check.awk");
   include("./lib/common.awk");
   include("./lib/init.awk");
   sourceIncludes();
 
+  # Check configuration and required executables
   checkConfiguration();
   checkExecs();
 
+  # Main function
   upm();
 }
 
+# function to incldue files
 function include(includeFile) {
   includes[includeFile]
 }
 
+# Function to build execution string to require
 function sourceIncludes() {
   if (!loaded) {
     "which awk" | getline awkPath
