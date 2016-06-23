@@ -4,13 +4,13 @@
 true ,/^; exec awk -f "$0" -v mainFile="$0" -- "$@"; exit #/ {}
 
 BEGIN {
-  include("./lib/define.awk");
+  include("./lib/check.awk");
   include("./lib/common.awk");
   include("./lib/init.awk");
   sourceIncludes();
 
-  defineConstants();
-  defineExec();
+  checkConfiguration();
+  checkExecs();
 
   upm();
 }

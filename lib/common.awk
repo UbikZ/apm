@@ -9,10 +9,13 @@ function upm() {
       argument = ARGV[i];
       if (argument ~ "^(-l|--list)$") {
         ARGV[i] = "";
-        #todo
       } else if (argument ~ "^(-v|--version)$") {
         ARGV[i] = "";
         print(version);
+      } else if (argument ~ "^(-c|--check)$") {
+        ARGV[i] = "";
+        checkConfiguration();
+        checkExecs();
       } else {
         if (argument !~ "^(-h|--help)$") {
           printf("Command \"%s\" is not defined.\n\n", argument);
@@ -27,10 +30,24 @@ function upm() {
 
 # Print the usage
 function usage() {
-  print("usage: upm [--list]\n");
+  print("usage: upm [--list]");
   print("  -l, --list         List of all dependencies.");
   print("  -v, --version      Print the current version.");
+  print("  -g, --global       Install dependencies globally.");
+  print("  -c, --check        Check upm right configuration.");
   print("  -h, --help         Print the usage message.");
-  print("  -g, --global       Install dependencies globally.\n");
+
   exit;
+}
+
+# Execute system command execution
+function exec(command) {
+  command | getline result;
+  return result;
+}
+
+# Check if command exists
+function existsCommand(command) {
+  cmd = sprintf("[[ ! `hash %s >/dev/null 2>&1 | wc -l` -eq 0 ]] && echo 0 || echo 1", command);
+  return exec(cmd);
 }
