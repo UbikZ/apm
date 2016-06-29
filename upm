@@ -10,15 +10,45 @@ BEGIN {
   # We are includeing script files
   include("./lib/check.awk");
   include("./lib/common.awk");
-  include("./lib/init.awk");
+  include("./command/init.awk");
   sourceIncludes();
 
   # Check configuration and required executables
   checkConfiguration();
   checkExecs();
 
-  # Main function
-  upm();
+  # Main command parameters handler
+  if (ARGC == 1) {
+    usage();
+  } else {
+    for (i = 1; i < ARGC; i++) {
+      argument = ARGV[i];
+      # Options
+      if (argument ~ "^(-v|--version)$") {
+        print(version);
+        exit;
+      } else if (argument ~ "^(-V|--verbose)$") {
+        verbose = 1;
+      } else if (argument ~ "^(-h|--help)?$"){
+        usage();
+      }
+      # Commands
+      else if (argument == "check") {
+        verbose = 1;
+        checkConfiguration();
+        checkExecs();
+        exit;
+      } else if (argument == "init") {
+        # todo
+      }
+      # If there is some trouble with the command/options
+      else {
+        printf("\nCommand \"%s\" is not defined.\n", argument);
+        usage();
+      }
+    }
+  }
+  exit;
 }
 
 # function to incldue files

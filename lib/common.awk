@@ -1,41 +1,5 @@
 #!/usr/bin/awk -f
-
-# Main command parameters handler
-function upm() {
-  if (ARGC == 1) {
-    usage();
-  } else {
-    for (i = 1; i < ARGC; i++) {
-      argument = ARGV[i];
-      # Options
-      if (argument ~ "^(-v|--version)$") {
-        print(version);
-        exit;
-      } else if (argument ~ "^(-V|--verbose)$") {
-        verbose = 1;
-      } else if (argument ~ "^(-h|--help)?$"){
-        usage();
-      }
-      # Commands
-      else if (argument == "check") {
-        verbose = 1;
-        checkConfiguration();
-        checkExecs();
-        exit;
-      } else if (argument == "init") {
-        # todo
-      }
-      # If there is some trouble with the command/options
-      else {
-        printf("\nCommand \"%s\" is not defined.\n", argument);
-        usage();
-      }
-    }
-  }
-
-  exit;
-}
-
+#
 # Print the usage
 function usage() {
   print("\nUsage: upm <options> <command>\n");
@@ -49,8 +13,34 @@ function usage() {
   exit;
 }
 
-# Execute system command execution
-function exec(command) {
+# Execute properly simple command
+# - If there is something one the stderr : exit code
+function properExec(command, arguments, message) {
+  result = exec(command, arguments);
+  if (result == 0) {
+    print(message);
+    if (verbose == 1) {
+
+    }
+    exit;
+  }
+  return result;
+}
+
+# Function to execute only known system commands
+function exec(command, arguments) {
+  if (cmds[command] != "") {
+    return __exec(cmds[command] " " arguments);
+  } else {
+    if (verbose == 1) {
+      printf("Command '%s' not indexed.\n", command);
+    }
+    exit;
+  }
+}
+
+# Generic function to execute system commands
+function __exec(command) {
   command | getline result;
   return result;
 }
@@ -58,5 +48,5 @@ function exec(command) {
 # Check if command exists
 function existsCommand(command) {
   cmd = sprintf("[[ ! `hash %s >/dev/null 2>&1 | wc -l` -eq 0 ]] && echo 0 || echo 1", command);
-  return exec(cmd);
+  return __exec(cmd);
 }

@@ -21,12 +21,12 @@ function checkExecs() {
   checkExecPath("which");
   checkExecPath("awk");
   checkExecPath("wget");
-  checkExecPath("curl");
+  checkExecPath("touch");
 }
 
 function checkExecPath(command) {
   if (existsCommand(command) == 1) {
-    cmds[command] = command = "which" ? command : exec(sprintf("%s %s", cmds["which"], command));
+    cmds[command] = command = "which" ? command : __exec(sprintf("%s %s", cmds["which"], command));
     if (verbose == 1) {
       printf("  ✔ Command '%s' is installed. Path : '%s'\n", command, cmds[command]);
     }
